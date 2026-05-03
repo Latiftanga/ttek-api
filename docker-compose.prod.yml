@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+
+  frontend:
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile.prod
+    volumes: []
+
+  api:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile.prod
+    volumes: []
+
+  worker:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile.prod
+    volumes: []
+
+  beat:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile.prod
+    volumes: []
+
+  # Close off DB ports in production
+  postgres:
+    ports: []
+
+  redis:
+    ports: []
+
+  couchdb:
+    ports: []
+
+  minio:
+    ports:
+      - "9000:9000"
+      - "9001:9001"
